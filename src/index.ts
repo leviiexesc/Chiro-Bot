@@ -62,6 +62,22 @@ const healthServer = http.createServer((req, res) => {
 
 healthServer.listen(PORT, () => {
   console.log(`🌐 Health server listening on port ${PORT}`);
+
+  // ── Self-ping every 14 minutes to prevent Render Free Plan from sleeping ──
+  // Render spins down web services after ~15 min of no inbound HTTP traffic.
+  // We call our own /health endpoint so the process is always "active".
+  const SELF_URL = process.env.RENDER_EXTERNAL_URL
+    ? `${process.env.RENDER_EXTERNAL_URL}/health`
+    : `http://localhost:${PORT}/health`;
+
+  setInterval(async () => {
+    try {
+      const res = await fetch(SELF_URL);
+      console.log(`💓 Self-ping → ${SELF_URL} [${res.status}]`);
+    } catch (err) {
+      console.warn("⚠️ Self-ping failed:", err);
+    }
+  }, 14 * 60 * 1000); // every 14 minutes
 });
 
 async function callTelegramApi(method: string, payload: Record<string, unknown> = {}) {
