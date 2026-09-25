@@ -1,14 +1,17 @@
 services:
-  - type: worker
+  - type: web
     name: chiro-telegram-bot
     runtime: node
     plan: free
     region: singapore
     buildCommand: npm install && npm run build
     startCommand: npm start
+    healthCheckPath: /health
     autoDeploy: true
     envVars:
       - key: TELEGRAM_BOT_TOKEN
         sync: false
       - key: API_BASE
         value: https://chiro-license-center.onrender.com/api/v1/client
+      - key: PORT
+        value: 10000

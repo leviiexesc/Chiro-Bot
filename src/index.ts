@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import http from "http";
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ interface TelegramUpdate {
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const API_BASE = (process.env.API_BASE || "https://chiro-license-center.onrender.com/api/v1/client").replace(/\/$/, "");
+const PORT = Number(process.env.PORT) || 10000;
 
 if (!TELEGRAM_BOT_TOKEN) {
   console.error("❌ ERROR: TELEGRAM_BOT_TOKEN is not set in environment or .env file!");
@@ -38,6 +40,29 @@ if (!TELEGRAM_BOT_TOKEN) {
 let isRunning = true;
 let lastUpdateId = 0;
 let botUsername = "ChiroBot";
+
+// Start lightweight HTTP health check server for Render Free Web Service
+const healthServer = http.createServer((req, res) => {
+  if (req.url === "/health" || req.url === "/") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(
+      JSON.stringify({
+        status: "healthy",
+        service: "Chiro Telegram Bot",
+        bot: `@${botUsername}`,
+        uptime: Math.floor(process.uptime()),
+        timestamp: new Date().toISOString(),
+      })
+    );
+  } else {
+    res.writeHead(404, { "Content-Type": "text/plain" });
+    res.end("Not Found");
+  }
+});
+
+healthServer.listen(PORT, () => {
+  console.log(`🌐 Health server listening on port ${PORT}`);
+});
 
 async function callTelegramApi(method: string, payload: Record<string, unknown> = {}) {
   try {
