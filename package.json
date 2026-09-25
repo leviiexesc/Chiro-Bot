@@ -1,0 +1,23 @@
+{
+  "name": "chiro-bot",
+  "version": "1.0.0",
+  "description": "Telegram Bot for Chiro UI License Center - Redeem Vouchers into Secure Keys",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "keywords": ["chiro", "telegram", "bot", "license", "redeem", "roblox"],
+  "author": "Chiro Security Systems",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.9",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3"
+  }
+}
