@@ -29,17 +29,16 @@ const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const API_BASE = (process.env.API_BASE || "https://chiro-license-center.onrender.com/api/v1/client").replace(/\/$/, "");
 const PORT = Number(process.env.PORT) || 10000;
 
-if (!TELEGRAM_BOT_TOKEN) {
-  console.error("❌ ERROR: TELEGRAM_BOT_TOKEN is not set in environment or .env file!");
-  console.error("1. Open Telegram and search for @BotFather");
-  console.error("2. Send /newbot and follow instructions to get an HTTP API Token");
-  console.error("3. Set TELEGRAM_BOT_TOKEN=your_token in .env");
-  process.exit(1);
-}
-
 let isRunning = true;
 let lastUpdateId = 0;
 let botUsername = "ChiroBot";
+let botConnected = false;
+
+if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN.trim() === "" || TELEGRAM_BOT_TOKEN.includes("your_")) {
+  console.log("⚠️ NOTICE: TELEGRAM_BOT_TOKEN is not configured yet.");
+  console.log("👉 Go to Render Dashboard -> 'Environment' tab -> Add/Edit TELEGRAM_BOT_TOKEN with your token from @BotFather.");
+  console.log("🌐 Health server remains active on port 10000 so Render stays online.");
+}
 
 // Start lightweight HTTP health check server for Render Free Web Service
 const healthServer = http.createServer((req, res) => {
@@ -49,7 +48,8 @@ const healthServer = http.createServer((req, res) => {
       JSON.stringify({
         status: "healthy",
         service: "Chiro Telegram Bot",
-        bot: `@${botUsername}`,
+        bot: botConnected ? `@${botUsername}` : "Waiting for TELEGRAM_BOT_TOKEN",
+        telegramConnected: botConnected,
         uptime: Math.floor(process.uptime()),
         timestamp: new Date().toISOString(),
       })
@@ -272,21 +272,32 @@ local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiex
 }
 
 async function startPolling() {
-  // Test connection to Bot API
-  const me = await callTelegramApi("getMe");
-  if (!me || !me.ok) {
-    console.error("❌ Telegram Bot: Invalid bot token or unable to reach Telegram API.");
-    process.exit(1);
+  if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN.trim() === "" || TELEGRAM_BOT_TOKEN.includes("your_")) {
+    console.log("ℹ️ Telegram polling is idle. Set TELEGRAM_BOT_TOKEN in Render Dashboard -> Environment to activate the bot.");
+    return;
   }
 
-  botUsername = me.result?.username || "ChiroBot";
-  console.log(`
+  while (isRunning) {
+    // Test connection to Bot API
+    const me = await callTelegramApi("getMe");
+    if (!me || !me.ok) {
+      console.warn("⚠️ Telegram Bot: Invalid bot token or unable to reach Telegram API. Retrying in 30s...");
+      console.warn("👉 Check your TELEGRAM_BOT_TOKEN in Render Dashboard -> 'Environment' tab.");
+      await new Promise((r) => setTimeout(r, 30000));
+      continue;
+    }
+
+    botUsername = me.result?.username || "ChiroBot";
+    botConnected = true;
+    console.log(`
   🤖 ========================================================
   ⚡ CHIRO TELEGRAM REDEEM BOT ACTIVE
   👤 Bot Username: @${botUsername}
   🔗 API Base: ${API_BASE}
   ========================================================
   `);
+    break;
+  }
 
   while (isRunning) {
     try {
