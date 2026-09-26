@@ -43,232 +43,234 @@ function getLang(userId?: number): "en" | "km" {
   return userLang.get(userId) ?? "en";
 }
 
-// ── Translation table ──────────────────────────────────────────────────────────
+function escapeHtml(str: string): string {
+  if (!str) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+// ── HTML Translation table ────────────────────────────────────────────────────
 const T = {
   en: {
     // /start
-    start: (name: string) => `⚡ *WELCOME TO CHIRO UI LICENSE BOT* ⚡
+    start: (name: string) => `⚡ <b>WELCOME TO CHIRO UI LICENSE BOT</b> ⚡
 
-Hello, *${name}*\\! This bot lets you redeem purchase vouchers into high\\-security script keys\\.
+Hello, <b>${escapeHtml(name)}</b>! This bot lets you redeem purchase vouchers into high-security script keys.
 
-*Available Commands:*
-🔑 \`/redeem <CODE>\` — Redeem your purchase voucher
-🆓 \`/free\` — Get a Free 24\\-Hour Key
-🔍 \`/verify <KEY>\` — Check your key status
-🔄 \`/resethwid <KEY>\` — Reset HWID _(4\\-day cooldown)_
-🌐 \`/lang\` — Change language / ប្តូរភាសា
-ℹ️ \`/help\` — How to use this bot
+<b>Available Commands:</b>
+🔑 <code>/redeem &lt;CODE&gt;</code> — Redeem your purchase voucher
+🆓 <code>/free</code> — Get a Free 24-Hour Key
+🔍 <code>/verify &lt;KEY&gt;</code> — Check your key status
+🔄 <code>/resethwid &lt;KEY&gt;</code> — Reset HWID <i>(4-day cooldown)</i>
+🌐 <code>/lang</code> — Change language / ប្តូរភាសា
+ℹ️ <code>/help</code> — How to use this bot
 
-*Example:*
-\`/redeem CHIRO\\-RA3H\\-RUEY\\-ESKF\`
+<b>Example:</b>
+<code>/redeem CHIRO-RA3H-RUEY-ESKF</code>
 
-_You can also paste your voucher code directly without typing /redeem\\!_`,
+<i>You can also paste your voucher code directly without typing /redeem!</i>`,
 
     // /help
-    help: `📖 *CHIRO LICENSE BOT HELP*
+    help: `📖 <b>CHIRO LICENSE BOT HELP</b>
 
-1️⃣ *How do I buy a key?*
-Purchase from our store\\. You will receive a code like \`CHIRO\\-XXXX\\-XXXX\\-XXXX\`\\.
+1️⃣ <b>How do I buy a key?</b>
+Purchase from our store. You will receive a voucher code like <code>CHIRO-XXXX-XXXX-XXXX</code>.
 
-2️⃣ *How do I redeem it?*
-Send: \`/redeem YOUR\\-CODE\`
-The bot will exchange it for a secure script key \\(\`CHIRO\\_xxxxxxxx\\.\\.\\.)\`\\.
+2️⃣ <b>How do I redeem it?</b>
+Send: <code>/redeem YOUR-CODE</code>
+The bot will exchange it for a secure script key (<code>CHIRO_xxxxxxxx...</code>).
 
-3️⃣ *How do I run it in Roblox?*
+3️⃣ <b>How do I run it in Roblox?</b>
 Add this at the top of your executor:
-\`\`\`lua
-getgenv\\(\\)\\.Key = "CHIRO\\_YOUR\\_KEY"
-\`\`\`
+<pre><code class="language-lua">getgenv().Key = "CHIRO_YOUR_KEY"
+local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiexesc/chiro_UI/main/chiro_lib.luau"))()</code></pre>
 
-4️⃣ *Free Key?*
-Type \`/free\` to generate a free 24\\-hour key\\.
+4️⃣ <b>Need a Free Key?</b>
+Type <code>/free</code> to generate a free 24-hour key.
 
-5️⃣ *Changed PC / Device?*
-Use \`/resethwid CHIRO\\_YOUR\\_KEY\`
-⚠️ *Cooldown: 4 days between resets\\.*`,
+5️⃣ <b>Changed PC / Device?</b>
+Use <code>/resethwid CHIRO_YOUR_KEY</code>
+⚠️ <i>Cooldown: 4 days between resets.</i>`,
 
     // /free
-    free: `🆓 *CHIRO UI FREE 24\\-HOUR KEY*
+    free: `🆓 <b>CHIRO UI FREE 24-HOUR KEY</b>
 
-Generate a free 24\\-hour key by completing 3 quick checkpoints:
+Generate a free 24-hour key by completing 3 quick checkpoints:
 
-👉 *Checkpoint Generator:*
-https://chiro\\-license\\-center\\.onrender\\.com/free\\-key
+👉 <b>Checkpoint Generator:</b>
+https://chiro-license-center.onrender.com/free-key
 
-1\\. Open the page above
-2\\. Complete the steps \\(15s wait each\\)
-3\\. Receive your free key instantly\\!`,
+1. Open the page above
+2. Complete the steps (15s wait each)
+3. Receive your free key instantly!`,
 
     // /lang
-    lang_prompt: `🌐 *SELECT LANGUAGE / ជ្រើសរើសភាសា*
+    lang_prompt: `🌐 <b>SELECT LANGUAGE / ជ្រើសរើសភាសា</b>
 
-Please reply with a number:
-1️⃣ \`/lang en\` — 🇺🇸 English
-2️⃣ \`/lang km\` — 🇰🇭 ខ្មែរ \\(Khmer\\)`,
-    lang_set_en: `✅ Language set to *English* 🇺🇸`,
-    lang_set_km: `✅ បានប្ដូរភាសាទៅ *ខ្មែរ* 🇰🇭`,
-    lang_invalid: `⚠️ Unknown language\\. Use \`/lang en\` or \`/lang km\``,
+Please reply with a command:
+1️⃣ <code>/lang en</code> — 🇺🇸 English
+2️⃣ <code>/lang km</code> — 🇰🇭 ខ្មែរ (Khmer)`,
+    lang_set_en: `✅ Language set to <b>English</b> 🇺🇸`,
+    lang_set_km: `✅ បានប្ដូរភាសាទៅ <b>ខ្មែរ</b> 🇰🇭`,
+    lang_invalid: `⚠️ Unknown language. Use <code>/lang en</code> or <code>/lang km</code>`,
 
     // /resethwid
-    resethwid_no_key: `⚠️ Please provide your script key\\.
-Example: \`/resethwid CHIRO\\_7d672a9d2743ddd3b50c2710\``,
-    resethwid_checking: `🔄 *Resetting your HWID\\.\\.\\.*`,
+    resethwid_no_key: `⚠️ Please provide your script key.
+Example: <code>/resethwid CHIRO_7d672a9d2743ddd3b50c2710</code>`,
+    resethwid_checking: `🔄 <b>Resetting your HWID...</b>`,
     resethwid_success: (key: string, nextDate: string) =>
-      `✅ *HWID Reset Successful\\!*
+      `✅ <b>HWID Reset Successful!</b>
 
-Your key \`${key}\` has been unlinked from all devices\\.
+Your key <code>${escapeHtml(key)}</code> has been unlinked from all devices.
 
-📱 You can now activate it on your new device\\.
-⏳ *Next reset available:* ${nextDate}`,
-    resethwid_fail: (msg: string) => `❌ *HWID Reset Failed*\n\n${msg}`,
-    resethwid_server_err: `❌ *Server Error*\n\nCould not reach the license server\\. Please try again later\\.`,
+📱 You can now activate it on your new device.
+⏳ <b>Next reset available:</b> ${escapeHtml(nextDate)}`,
+    resethwid_fail: (msg: string) => `❌ <b>HWID Reset Failed</b>\n\n${escapeHtml(msg)}`,
+    resethwid_server_err: `❌ <b>Server Error</b>\n\nCould not reach the license server. Please try again later.`,
 
     // /verify
-    verify_no_key: `⚠️ Please provide a key to verify\\.
-Example: \`/verify CHIRO\\_7d672a9d2743ddd3b50c2710\``,
-    verify_checking: `🔍 *Checking key status on server\\.\\.\\.*`,
+    verify_no_key: `⚠️ Please provide a key to verify.
+Example: <code>/verify CHIRO_7d672a9d2743ddd3b50c2710</code>`,
+    verify_checking: `🔍 <b>Checking key status on server...</b>`,
     verify_valid: (prod: string, status: string, exp: string, devices: string) =>
-      `✅ *LICENSE VALID*\n\n📦 *Product:* ${prod}\n🟢 *Status:* ${status}\n⏳ *Expires:* ${exp}\n📱 *Devices Bound:* ${devices}`,
-    verify_fail: (msg: string) => `❌ *Key Verification Failed*\n\n${msg}`,
+      `✅ <b>LICENSE VALID</b>\n\n📦 <b>Product:</b> ${escapeHtml(prod)}\n🟢 <b>Status:</b> ${escapeHtml(status)}\n⏳ <b>Expires:</b> ${escapeHtml(exp)}\n📱 <b>Devices Bound:</b> ${escapeHtml(devices)}`,
+    verify_fail: (msg: string) => `❌ <b>Key Verification Failed</b>\n\n${escapeHtml(msg)}`,
 
     // /redeem
-    redeem_checking: `⏳ *Verifying and redeeming your voucher\\.\\.\\.*`,
+    redeem_checking: `⏳ <b>Verifying and redeeming your voucher...</b>`,
     redeem_success: (prod: string, dur: string, slots: string, key: string) =>
-      `🎉 *PURCHASE VOUCHER REDEEMED\\!*
+      `🎉 <b>PURCHASE VOUCHER REDEEMED!</b>
 
-📦 *Product:* ${prod}
-⏳ *Duration:* ${dur}
-📱 *Device Slots:* ${slots}
+📦 <b>Product:</b> ${escapeHtml(prod)}
+⏳ <b>Duration:</b> ${escapeHtml(dur)}
+📱 <b>Device Slots:</b> ${escapeHtml(slots)}
 
-🔑 *Your High\\-Security Script Key:*
-\`${key}\`
-_\\(Tap key above to copy\\)_
+🔑 <b>Your High-Security Script Key:</b>
+<code>${escapeHtml(key)}</code>
+<i>(Tap key above to copy)</i>
 
-📋 *How to execute in your script:*
-\`\`\`lua
-getgenv\\(\\)\\.Key = "${key}"
-local Chiro = loadstring\\(game:HttpGet\\("https://raw.githubusercontent.com/leviiexesc/chiro\\_UI/main/chiro\\_lib.luau"\\)\\)\\(\\)
-\`\`\`
+📋 <b>How to execute in your script:</b>
+<pre><code class="language-lua">getgenv().Key = "${escapeHtml(key)}"
+local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiexesc/chiro_UI/main/chiro_lib.luau"))()</code></pre>
 
-⚠️ *Important:* Save your key\\! Your original purchase code has been consumed\\.`,
+⚠️ <b>Important:</b> Save your key! Your original purchase code has been consumed.`,
     redeem_fail: (msg: string) =>
-      `❌ *Redeem Failed*\n\n${msg}\n\nPlease check your purchase code and try again or contact support\\.`,
+      `❌ <b>Redeem Failed</b>\n\n${escapeHtml(msg)}\n\nPlease check your purchase code and try again or contact support.`,
 
     // unknown
-    unknown: `❓ Unrecognized command\\. Send \`/redeem <CODE>\` to redeem your voucher, or \`/help\` for instructions\\.`,
+    unknown: `❓ Unrecognized command. Send <code>/redeem &lt;CODE&gt;</code> to redeem your voucher, or <code>/help</code> for instructions.`,
   },
 
   km: {
     // /start
-    start: (name: string) => `⚡ *សូមស្វាគមន៍មកកាន់ CHIRO UI LICENSE BOT* ⚡
+    start: (name: string) => `⚡ <b>សូមស្វាគមន៍មកកាន់ CHIRO UI LICENSE BOT</b> ⚡
 
-សួស្ដី, *${name}*\\! Bot នេះអនុញ្ញាតឱ្យអ្នកដូររបៀបប្ដូរ voucher ទៅជា script key សុវត្ថិភាពខ្ពស់\\.
+សួស្ដី, <b>${escapeHtml(name)}</b>! Bot នេះអនុញ្ញាតឱ្យអ្នកដូរ voucher ទៅជា script key សុវត្ថិភាពខ្ពស់។
 
-*ពាក្យបញ្ជាដែលមាន:*
-🔑 \`/redeem <CODE>\` — ប្ដូរ voucher របស់អ្នក
-🆓 \`/free\` — ទទួល Key ឥតគិតថ្លៃ 24 ម៉ោង
-🔍 \`/verify <KEY>\` — ពិនិត្យស្ថានភាព key
-🔄 \`/resethwid <KEY>\` — កំណត់ HWID ឡើងវិញ _(រង់ចាំ 4 ថ្ងៃ)_
-🌐 \`/lang\` — ប្ដូរភាសា / Change language
-ℹ️ \`/help\` — របៀបប្រើ bot
+<b>ពាក្យបញ្ជាដែលមាន:</b>
+🔑 <code>/redeem &lt;CODE&gt;</code> — ប្ដូរ voucher របស់អ្នក
+🆓 <code>/free</code> — ទទួល Key ឥតគិតថ្លៃ 24 ម៉ោង
+🔍 <code>/verify &lt;KEY&gt;</code> — ពិនិត្យស្ថានភាព key
+🔄 <code>/resethwid &lt;KEY&gt;</code> — កំណត់ HWID ឡើងវិញ <i>(រង់ចាំ 4 ថ្ងៃ)</i>
+🌐 <code>/lang</code> — ប្ដូរភាសា / Change language
+ℹ️ <code>/help</code> — របៀបប្រើ bot
 
-*ឧទាហរណ៍:*
-\`/redeem CHIRO\\-RA3H\\-RUEY\\-ESKF\`
+<b>ឧទាហរណ៍:</b>
+<code>/redeem CHIRO-RA3H-RUEY-ESKF</code>
 
-_អ្នកក៏អាចផ្ញើ voucher code ដោយផ្ទាល់ ដោយមិនចាំបាច់វាយ /redeem\\!_`,
+<i>អ្នកក៏អាចផ្ញើ voucher code ដោយផ្ទាល់ ដោយមិនចាំបាច់វាយ /redeem!</i>`,
 
     // /help
-    help: `📖 *ជំនួយ CHIRO LICENSE BOT*
+    help: `📖 <b>ជំនួយ CHIRO LICENSE BOT</b>
 
-1️⃣ *តើខ្ញុំទិញ key យ៉ាងដូចម្ដេច?*
-ទិញពីហាងផ្លូវការ\\. អ្នកនឹងទទួលបាន code ដូចជា \`CHIRO\\-XXXX\\-XXXX\\-XXXX\`\\.
+1️⃣ <b>តើខ្ញុំទិញ key យ៉ាងដូចម្ដេច?</b>
+ទិញពីហាងផ្លូវការ។ អ្នកនឹងទទួលបាន voucher code ដូចជា <code>CHIRO-XXXX-XXXX-XXXX</code>។
 
-2️⃣ *តើខ្ញុំប្ដូរ voucher យ៉ាងដូចម្ដេច?*
-ផ្ញើ: \`/redeem YOUR\\-CODE\`
-Bot នឹងប្ដូរ voucher ទៅជា script key \\(\`CHIRO\\_xxxxxxxx\\.\\.\\.\\)\`\\.
+2️⃣ <b>តើខ្ញុំប្ដូរ voucher យ៉ាងដូចម្ដេច?</b>
+ផ្ញើ: <code>/redeem YOUR-CODE</code>
+Bot នឹងប្ដូរ voucher ទៅជា script key (<code>CHIRO_xxxxxxxx...</code>)។
 
-3️⃣ *តើខ្ញុំប្រើ key ក្នុង Roblox យ៉ាងដូចម្ដេច?*
-បន្ថែមកូដនេះនៅកំពូល executor:
-\`\`\`lua
-getgenv\\(\\)\\.Key = "CHIRO\\_YOUR\\_KEY"
-\`\`\`
+3️⃣ <b>តើខ្ញុំប្រើ key ក្នុង Roblox យ៉ាងដូចម្ដេច?</b>
+បន្ថែមកូដនេះនៅកំពូល executor របស់អ្នក:
+<pre><code class="language-lua">getgenv().Key = "CHIRO_YOUR_KEY"
+local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiexesc/chiro_UI/main/chiro_lib.luau"))()</code></pre>
 
-4️⃣ *Key ឥតគិតថ្លៃ?*
-វាយ \`/free\` ដើម្បីទទួលបាន key ឥតគិតថ្លៃ 24 ម៉ោង\\.
+4️⃣ <b>Key ឥតគិតថ្លៃ?</b>
+វាយ <code>/free</code> ដើម្បីទទួលបាន key ឥតគិតថ្លៃ 24 ម៉ោង។
 
-5️⃣ *ប្ដូរ PC / ឧបករណ៍ថ្មី?*
-ប្រើ \`/resethwid CHIRO\\_YOUR\\_KEY\`
-⚠️ *ត្រូវរង់ចាំ 4 ថ្ងៃ រវាងការ reset\\.*`,
+5️⃣ <b>ប្ដូរ PC / ឧបករណ៍ថ្មី?</b>
+ប្រើ <code>/resethwid CHIRO_YOUR_KEY</code>
+⚠️ <i>ត្រូវរង់ចាំ 4 ថ្ងៃ រវាងការ reset។</i>`,
 
     // /free
-    free: `🆓 *CHIRO UI KEY ឥតគិតថ្លៃ 24 ម៉ោង*
+    free: `🆓 <b>CHIRO UI KEY ឥតគិតថ្លៃ 24 ម៉ោង</b>
 
 ទទួលបាន key ឥតគិតថ្លៃ 24 ម៉ោង ដោយបំពេញ 3 ជំហានរហ័ស:
 
-👉 *Checkpoint Generator:*
-https://chiro\\-license\\-center\\.onrender\\.com/free\\-key
+👉 <b>Checkpoint Generator:</b>
+https://chiro-license-center.onrender.com/free-key
 
-1\\. បើកទំព័រខាងលើ
-2\\. បំពេញជំហានទាំង 3 \\(រង់ចាំ 15 វិនាទីនីមួយៗ\\)
-3\\. ទទួលបាន key ភ្លាមៗ\\!`,
+1. បើកទំព័រខាងលើ
+2. បំពេញជំហានទាំង 3 (រង់ចាំ 15 វិនាទីនីមួយៗ)
+3. ទទួលបាន key ភ្លាមៗ!`,
 
     // /lang
-    lang_prompt: `🌐 *ជ្រើសរើសភាសា / SELECT LANGUAGE*
+    lang_prompt: `🌐 <b>ជ្រើសរើសភាសា / SELECT LANGUAGE</b>
 
-សូមឆ្លើយតបជាមួយលេខ:
-1️⃣ \`/lang en\` — 🇺🇸 English
-2️⃣ \`/lang km\` — 🇰🇭 ខ្មែរ \\(Khmer\\)`,
-    lang_set_en: `✅ Language set to *English* 🇺🇸`,
-    lang_set_km: `✅ បានប្ដូរភាសាទៅ *ខ្មែរ* 🇰🇭`,
-    lang_invalid: `⚠️ ភាសាមិនត្រឹមត្រូវ\\. ប្រើ \`/lang en\` ឬ \`/lang km\``,
+សូមឆ្លើយតបជាមួយពាក្យបញ្ជា:
+1️⃣ <code>/lang en</code> — 🇺🇸 English
+2️⃣ <code>/lang km</code> — 🇰🇭 ខ្មែរ (Khmer)`,
+    lang_set_en: `✅ Language set to <b>English</b> 🇺🇸`,
+    lang_set_km: `✅ បានប្ដូរភាសាទៅ <b>ខ្មែរ</b> 🇰🇭`,
+    lang_invalid: `⚠️ ភាសាមិនត្រឹមត្រូវ។ ប្រើ <code>/lang en</code> ឬ <code>/lang km</code>`,
 
     // /resethwid
-    resethwid_no_key: `⚠️ សូមផ្ដល់ script key របស់អ្នក\\.
-ឧទាហរណ៍: \`/resethwid CHIRO\\_7d672a9d2743ddd3b50c2710\``,
-    resethwid_checking: `🔄 *កំពុង Reset HWID\\.\\.\\.*`,
+    resethwid_no_key: `⚠️ សូមផ្ដល់ script key របស់អ្នក។
+ឧទាហរណ៍: <code>/resethwid CHIRO_7d672a9d2743ddd3b50c2710</code>`,
+    resethwid_checking: `🔄 <b>កំពុង Reset HWID...</b>`,
     resethwid_success: (key: string, nextDate: string) =>
-      `✅ *Reset HWID បានជោគជ័យ\\!*
+      `✅ <b>Reset HWID បានជោគជ័យ!</b>
 
-Key \`${key}\` ត្រូវបានដោះចំណងពីឧបករណ៍ទាំងអស់\\.
+Key <code>${escapeHtml(key)}</code> ត្រូវបានដោះចំណងពីឧបករណ៍ទាំងអស់។
 
-📱 អ្នកអាចប្ប activate លើឧបករណ៍ថ្មីឥឡូវ\\.
-⏳ *Reset បន្ទាប់អាចធ្វើបាននៅ:* ${nextDate}`,
-    resethwid_fail: (msg: string) => `❌ *Reset HWID បរាជ័យ*\n\n${msg}`,
-    resethwid_server_err: `❌ *Server Error*\n\nមិនអាចភ្ជាប់ server\\. សូមព្យាយាមម្ដងទៀត\\.`,
+📱 អ្នកអាចយកទៅប្រើលើឧបករណ៍ថ្មីបានហើយ។
+⏳ <b>Reset បន្ទាប់អាចធ្វើបាននៅ:</b> ${escapeHtml(nextDate)}`,
+    resethwid_fail: (msg: string) => `❌ <b>Reset HWID បរាជ័យ</b>\n\n${escapeHtml(msg)}`,
+    resethwid_server_err: `❌ <b>Server Error</b>\n\nមិនអាចភ្ជាប់ server។ សូមព្យាយាមម្ដងទៀត។`,
 
     // /verify
-    verify_no_key: `⚠️ សូមផ្ដល់ key ដើម្បីពិនិត្យ\\.
-ឧទាហរណ៍: \`/verify CHIRO\\_7d672a9d2743ddd3b50c2710\``,
-    verify_checking: `🔍 *កំពុងពិនិត្យ key \\.\\.\\.*`,
+    verify_no_key: `⚠️ សូមផ្ដល់ key ដើម្បីពិនិត្យ។
+ឧទាហរណ៍: <code>/verify CHIRO_7d672a9d2743ddd3b50c2710</code>`,
+    verify_checking: `🔍 <b>កំពុងពិនិត្យ key...</b>`,
     verify_valid: (prod: string, status: string, exp: string, devices: string) =>
-      `✅ *LICENSE ត្រឹមត្រូវ*\n\n📦 *ផលិតផល:* ${prod}\n🟢 *ស្ថានភាព:* ${status}\n⏳ *អស់សុពលភាព:* ${exp}\n📱 *ឧបករណ៍ចូលភ្ជាប់:* ${devices}`,
-    verify_fail: (msg: string) => `❌ *ការពិនិត្យ Key បរាជ័យ*\n\n${msg}`,
+      `✅ <b>LICENSE ត្រឹមត្រូវ</b>\n\n📦 <b>ផលិតផល:</b> ${escapeHtml(prod)}\n🟢 <b>ស្ថានភាព:</b> ${escapeHtml(status)}\n⏳ <b>អស់សុពលភាព:</b> ${escapeHtml(exp)}\n📱 <b>ឧបករណ៍ចូលភ្ជាប់:</b> ${escapeHtml(devices)}`,
+    verify_fail: (msg: string) => `❌ <b>ការពិនិត្យ Key បរាជ័យ</b>\n\n${escapeHtml(msg)}`,
 
     // /redeem
-    redeem_checking: `⏳ *កំពុងផ្ទៀងផ្ទាត់ និងប្ដូរ voucher \\.\\.\\.*`,
+    redeem_checking: `⏳ <b>កំពុងផ្ទៀងផ្ទាត់ និងប្ដូរ voucher...</b>`,
     redeem_success: (prod: string, dur: string, slots: string, key: string) =>
-      `🎉 *VOUCHER ត្រូវបានប្ដូរ\\!*
+      `🎉 <b>VOUCHER ត្រូវបានប្ដូរ!</b>
 
-📦 *ផលិតផល:* ${prod}
-⏳ *រយៈពេល:* ${dur}
-📱 *ម៉ាស៊ីនដែលអាចប្ប activate:* ${slots}
+📦 <b>ផលិតផល:</b> ${escapeHtml(prod)}
+⏳ <b>រយៈពេល:</b> ${escapeHtml(dur)}
+📱 <b>ចំនួនម៉ាស៊ីន:</b> ${escapeHtml(slots)}
 
-🔑 *Script Key សុវត្ថិភាពរបស់អ្នក:*
-\`${key}\`
-_\\(ចុចលើ key ដើម្បី copy\\)_
+🔑 <b>Script Key សុវត្ថិភាពរបស់អ្នក:</b>
+<code>${escapeHtml(key)}</code>
+<i>(ចុចលើ key ដើម្បី copy)</i>
 
-📋 *របៀប execute ក្នុង Roblox:*
-\`\`\`lua
-getgenv\\(\\)\\.Key = "${key}"
-local Chiro = loadstring\\(game:HttpGet\\("https://raw.githubusercontent.com/leviiexesc/chiro\\_UI/main/chiro\\_lib.luau"\\)\\)\\(\\)
-\`\`\`
+📋 <b>របៀប execute ក្នុង Roblox:</b>
+<pre><code class="language-lua">getgenv().Key = "${escapeHtml(key)}"
+local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiexesc/chiro_UI/main/chiro_lib.luau"))()</code></pre>
 
-⚠️ *សំខាន់:* រក្សាទុក key\\! Voucher ដើមត្រូវបានប្រើរួចហើយ\\.`,
+⚠️ <b>សំខាន់:</b> រក្សាទុក key របស់អ្នក! Voucher ដើមត្រូវបានប្រើរួចហើយ។`,
     redeem_fail: (msg: string) =>
-      `❌ *ការប្ដូរ Voucher បរាជ័យ*\n\n${msg}\n\nសូមពិនិត្យ code ម្ដងទៀត ឬទំនាក់ទំនង support\\.`,
+      `❌ <b>ការប្ដូរ Voucher បរាជ័យ</b>\n\n${escapeHtml(msg)}\n\nសូមពិនិត្យ code ម្ដងទៀត ឬទាក់ទង support។`,
 
     // unknown
-    unknown: `❓ ពាក្យបញ្ជាមិនត្រឹមត្រូវ\\. ផ្ញើ \`/redeem <CODE>\` ដើម្បីប្ដូរ voucher, ឬ \`/help\` សម្រាប់ការណែនាំ\\.`,
+    unknown: `❓ ពាក្យបញ្ជាមិនត្រឹមត្រូវ។ ផ្ញើ <code>/redeem &lt;CODE&gt;</code> ដើម្បីប្ដូរ voucher, ឬ <code>/help</code> សម្រាប់ការណែនាំ។`,
   },
 };
 
@@ -326,20 +328,37 @@ async function callTelegramApi(method: string, payload: Record<string, unknown> 
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-    return (await res.json()) as any;
+    const json = (await res.json()) as any;
+    if (!json.ok) {
+      console.error(`❌ Telegram API Error (${method}):`, json.description || json);
+    }
+    return json;
   } catch (err) {
-    console.error(`❌ Telegram API Error (${method}):`, err);
+    console.error(`❌ Telegram Network Error (${method}):`, err);
     return null;
   }
 }
 
-async function sendMessage(chatId: number | string, text: string, parseMode: "MarkdownV2" | "HTML" = "MarkdownV2") {
-  return await callTelegramApi("sendMessage", {
+async function sendMessage(chatId: number | string, htmlText: string) {
+  const result = await callTelegramApi("sendMessage", {
     chat_id: chatId,
-    text,
-    parse_mode: parseMode,
+    text: htmlText,
+    parse_mode: "HTML",
     disable_web_page_preview: true,
   });
+
+  // If HTML parse fails, automatically retry as plain text so the user ALWAYS gets the response!
+  if (!result || !result.ok) {
+    console.warn(`⚠️ HTML parse failed on Telegram. Retrying as plain text...`);
+    const plainText = htmlText.replace(/<[^>]*>/g, "");
+    return await callTelegramApi("sendMessage", {
+      chat_id: chatId,
+      text: plainText,
+      disable_web_page_preview: true,
+    });
+  }
+
+  return result;
 }
 
 // Redeem purchase voucher code via Chiro License Center API
@@ -379,14 +398,16 @@ async function handleMessage(msg: NonNullable<TelegramUpdate["message"]>) {
   const lang = getLang(userId);
   const t = T[lang];
 
+  console.log(`📩 Incoming message from ${username} (${chatId}): "${rawText}" [Lang: ${lang}]`);
+
   // ── /start ────────────────────────────────────────────────────────────────
-  if (rawText === "/start") {
+  if (rawText === "/start" || rawText.startsWith("/start ")) {
     await sendMessage(chatId, t.start(username));
     return;
   }
 
   // ── /help ─────────────────────────────────────────────────────────────────
-  if (rawText === "/help") {
+  if (rawText === "/help" || rawText.startsWith("/help ")) {
     await sendMessage(chatId, t.help);
     return;
   }
@@ -413,7 +434,7 @@ async function handleMessage(msg: NonNullable<TelegramUpdate["message"]>) {
   }
 
   // ── /free ─────────────────────────────────────────────────────────────────
-  if (rawText === "/free") {
+  if (rawText === "/free" || rawText.startsWith("/free ")) {
     await sendMessage(chatId, t.free);
     return;
   }
@@ -446,8 +467,8 @@ async function handleMessage(msg: NonNullable<TelegramUpdate["message"]>) {
         await sendMessage(chatId, t.resethwid_success(keyToReset, nextReset));
       } else {
         const errMsg = data?.error?.message || (lang === "km"
-          ? "HWID Reset បរាជ័យ\\. សូមពិនិត្យ key ម្ដងទៀត\\."
-          : "Failed to reset HWID\\. Check your key or try again later\\.");
+          ? "HWID Reset បរាជ័យ។ សូមពិនិត្យ key ម្ដងទៀត។"
+          : "Failed to reset HWID. Check your key or try again later.");
         await sendMessage(chatId, t.resethwid_fail(errMsg));
       }
     } catch {
@@ -473,11 +494,11 @@ async function handleMessage(msg: NonNullable<TelegramUpdate["message"]>) {
       const prodName = d.product?.name || "Chiro UI";
       const exp = d.license?.expiresAt
         ? new Date(d.license.expiresAt).toLocaleDateString(lang === "km" ? "km-KH" : "en-GB")
-        : lang === "km" ? "អស់កំណត់" : "Lifetime";
+        : lang === "km" ? "គ្មានកំណត់" : "Lifetime";
       const devices = `${d.license?.currentDevices || 0}/${d.license?.maxDevices || 1}`;
       await sendMessage(chatId, t.verify_valid(prodName, status, exp, devices));
     } else {
-      const err = res?.error?.message || (lang === "km" ? "Key មិនត្រឹមត្រូវ\\." : "Key not found or invalid\\.");
+      const err = res?.error?.message || (lang === "km" ? "Key មិនត្រឹមត្រូវ។" : "Key not found or invalid.");
       await sendMessage(chatId, t.verify_fail(err));
     }
     return;
@@ -499,7 +520,7 @@ async function handleMessage(msg: NonNullable<TelegramUpdate["message"]>) {
       const data = result.data;
       const durationStr = data.durationDays
         ? `${data.durationDays} ${lang === "km" ? "ថ្ងៃ" : "Days"}`
-        : lang === "km" ? "Lifetime VIP" : "Lifetime VIP";
+        : "Lifetime VIP";
       await sendMessage(
         chatId,
         t.redeem_success(
@@ -511,8 +532,8 @@ async function handleMessage(msg: NonNullable<TelegramUpdate["message"]>) {
       );
     } else {
       const errMsg = result?.error?.message || (lang === "km"
-        ? "Voucher មិនត្រឹមត្រូវ ឬត្រូវបានប្ដូររួចហើយ\\."
-        : "Invalid or already redeemed voucher code\\.");
+        ? "Voucher មិនត្រឹមត្រូវ ឬត្រូវបានប្ដូររួចហើយ។"
+        : "Invalid or already redeemed voucher code.");
       await sendMessage(chatId, t.redeem_fail(errMsg));
     }
     return;
@@ -539,6 +560,11 @@ async function startPolling() {
 
     botUsername = me.result?.username || "ChiroBot";
     botConnected = true;
+
+    // IMPORTANT: Clear any existing webhook so getUpdates receives messages!
+    const webhookRes = await callTelegramApi("deleteWebhook", { drop_pending_updates: false });
+    console.log("📡 Telegram Webhook cleared:", webhookRes?.ok ? "OK" : webhookRes?.description);
+
     console.log(`
   🤖 ========================================================
   ⚡ CHIRO TELEGRAM REDEEM BOT ACTIVE
@@ -565,6 +591,9 @@ async function startPolling() {
             await handleMessage(update.message);
           }
         }
+      } else if (data && !data.ok) {
+        console.warn("⚠️ getUpdates warning:", data.description);
+        await new Promise((r) => setTimeout(r, 3000));
       }
     } catch (loopErr) {
       console.error("⚠️ Telegram polling error:", loopErr);
