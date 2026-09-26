@@ -72,8 +72,9 @@ function getReplyKeyboard(lang: "en" | "km") {
     return {
       keyboard: [
         [{ text: "🔑 ប្ដូរ Key" }, { text: "🆓 Key ឥតគិតថ្លៃ" }],
-        [{ text: "🔄 Reset HWID" }, { text: "🔍 ពិនិត្យ Key" }],
-        [{ text: "🌐 ភាសា / Language" }, { text: "ℹ️ ជំនួយ" }],
+        [{ text: "🔄 Reset HWID" }, { text: "📊 Key របស់ខ្ញុំ" }],
+        [{ text: "🔍 ពិនិត្យ Key" }, { text: "🌐 ភាសា / Language" }],
+        [{ text: "ℹ️ ជំនួយ" }],
       ],
       resize_keyboard: true,
       is_persistent: true,
@@ -82,8 +83,9 @@ function getReplyKeyboard(lang: "en" | "km") {
   return {
     keyboard: [
       [{ text: "🔑 Redeem Key" }, { text: "🆓 Free 24h Key" }],
-      [{ text: "🔄 Reset HWID" }, { text: "🔍 Verify Key" }],
-      [{ text: "🌐 ភាសា / Language" }, { text: "ℹ️ Help" }],
+      [{ text: "🔄 Reset HWID" }, { text: "📊 My Keys" }],
+      [{ text: "🔍 Verify Key" }, { text: "🌐 ភាសា / Language" }],
+      [{ text: "ℹ️ Help" }],
     ],
     resize_keyboard: true,
     is_persistent: true,
@@ -108,7 +110,8 @@ Hello, <b>${escapeHtml(name)}</b>! Tap any button below on your phone to get sta
 
 🔑 <b>Redeem Key</b> — Turn purchase voucher into script key
 🆓 <b>Free Key</b> — Generate a free 24-hour key
-🔄 <b>Reset HWID</b> — Move key to new device (4-day cooldown)
+🔄 <b>Reset HWID</b> — Move key to new device (Protected by Telegram ID)
+📊 <b>My Keys</b> — View all keys redeemed by your account
 🔍 <b>Verify Key</b> — Check your key status
 🌐 <b>Language</b> — Switch between English and ខ្មែរ`,
 
@@ -118,7 +121,7 @@ Hello, <b>${escapeHtml(name)}</b>! Tap any button below on your phone to get sta
 Purchase from our store to receive a voucher code (<code>CHIRO-XXXX-XXXX-XXXX</code>), or tap <b>🆓 Free 24h Key</b>!
 
 2️⃣ <b>How to redeem?</b>
-Tap <b>🔑 Redeem Key</b> and send your voucher code. The bot will exchange it for a high-security script key (<code>CHIRO_xxxxxxxx...</code>).
+Tap <b>🔑 Redeem Key</b> and send your voucher code. The bot binds the key to your Telegram ID and returns a high-security script key (<code>CHIRO_xxxxxxxx...</code>).
 
 3️⃣ <b>How to execute in Roblox?</b>
 Put this at the top of your executor:
@@ -126,7 +129,8 @@ Put this at the top of your executor:
 local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiexesc/chiro_UI/main/chiro_lib.luau"))()</code></pre>
 
 4️⃣ <b>Changed PC or device?</b>
-Tap <b>🔄 Reset HWID</b>. <i>(Available once every 4 days)</i>.`,
+Tap <b>🔄 Reset HWID</b>.
+🛡️ <b>Security Protection:</b> Only <i>your</i> Telegram account can reset HWID for your redeemed keys! Nobody else can reset your key from another account.`,
 
     free: `🆓 <b>CHIRO UI FREE 24-HOUR KEY</b>
 
@@ -155,7 +159,7 @@ Your key <code>${escapeHtml(key)}</code> has been unlinked from all devices.
 
 📱 You can now activate it on your new device.
 ⏳ <b>Next reset available:</b> ${escapeHtml(nextDate)}`,
-    resethwid_fail: (msg: string) => `❌ <b>HWID Reset Failed</b>\n\n${escapeHtml(msg)}`,
+    resethwid_fail: (msg: string) => `❌ <b>HWID Reset Blocked / Failed</b>\n\n${escapeHtml(msg)}`,
     resethwid_server_err: `❌ <b>Server Error</b>\n\nCould not reach license server. Please try again.`,
 
     verify_checking: `🔍 <b>Checking key status on server...</b>`,
@@ -171,7 +175,7 @@ Your key <code>${escapeHtml(key)}</code> has been unlinked from all devices.
 ⏳ <b>Duration:</b> ${escapeHtml(dur)}
 📱 <b>Device Slots:</b> ${escapeHtml(slots)}
 
-🔑 <b>Your Script Key:</b>
+🔑 <b>Your Script Key (Bound to your Telegram Account):</b>
 <code>${escapeHtml(key)}</code>
 <i>(Tap key above to copy)</i>
 
@@ -179,7 +183,7 @@ Your key <code>${escapeHtml(key)}</code> has been unlinked from all devices.
 <pre><code class="language-lua">getgenv().Key = "${escapeHtml(key)}"
 local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiexesc/chiro_UI/main/chiro_lib.luau"))()</code></pre>
 
-⚠️ <b>Save this key!</b> Your voucher code has been consumed.`,
+🛡️ <i>This key is securely bound to your Telegram ID. Only you can reset its HWID!</i>`,
     redeem_fail: (msg: string) =>
       `❌ <b>Redeem Failed</b>\n\n${escapeHtml(msg)}\n\nPlease check your purchase code and try again.`,
 
@@ -193,7 +197,8 @@ local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiex
 
 🔑 <b>ប្ដូរ Key</b> — ប្ដូរ voucher ទៅជា script key សុវត្ថិភាព
 🆓 <b>Key ឥតគិតថ្លៃ</b> — ទទួល key ឥតគិតថ្លៃ 24 ម៉ោង
-🔄 <b>Reset HWID</b> — ដោះចំណងឧបករណ៍ (រង់ចាំ 4 ថ្ងៃ)
+🔄 <b>Reset HWID</b> — ដោះចំណងឧបករណ៍ (ចាក់សោតាម Telegram ID)
+📊 <b>Key របស់ខ្ញុំ</b> — មើល key ទាំងអស់ដែលបានប្ដូរលើគណនីនេះ
 🔍 <b>ពិនិត្យ Key</b> — ពិនិត្យស្ថានភាព key របស់អ្នក
 🌐 <b>ភាសា</b> — ប្ដូររវាងភាសា ខ្មែរ និង English`,
 
@@ -203,7 +208,7 @@ local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiex
 ទិញពីហាងផ្លូវការដើម្បីទទួល voucher code (<code>CHIRO-XXXX-XXXX-XXXX</code>) ឬចុច <b>🆓 Key ឥតគិតថ្លៃ</b>!
 
 2️⃣ <b>តើត្រូវប្ដូរ voucher យ៉ាងណា?</b>
-ចុច <b>🔑 ប្ដូរ Key</b> រួចផ្ញើ voucher code របស់អ្នក។ Bot នឹងប្ដូរទៅជា script key (<code>CHIRO_xxxxxxxx...</code>)។
+ចុច <b>🔑 ប្ដូរ Key</b> រួចផ្ញើ voucher code។ Bot នឹងចាក់សោ key ជាមួយ Telegram ID របស់អ្នកដើម្បីសុវត្ថិភាព។
 
 3️⃣ <b>តើត្រូវ execute ក្នុង Roblox យ៉ាងណា?</b>
 ដាក់កូដនេះនៅកំពូល executor របស់អ្នក:
@@ -211,7 +216,8 @@ local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiex
 local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiexesc/chiro_UI/main/chiro_lib.luau"))()</code></pre>
 
 4️⃣ <b>ប្ដូរទូរស័ព្ទ ឬកុំព្យូទ័រថ្មី?</b>
-ចុច <b>🔄 Reset HWID</b> <i>(អាចធ្វើបាន 4 ថ្ងៃម្ដង)</i>។`,
+ចុច <b>🔄 Reset HWID</b>
+🛡️ <b>ប្រព័ន្ធសុវត្ថិភាពខ្ពស់:</b> មានតែ Telegram របស់អ្នកប៉ុណ្ណោះដែលអាច Reset HWID បាន! គណនីផ្សេងមិនអាចលួច reset key របស់អ្នកបានឡើយ។`,
 
     free: `🆓 <b>CHIRO UI KEY ឥតគិតថ្លៃ 24 ម៉ោង</b>
 
@@ -240,7 +246,7 @@ Key <code>${escapeHtml(key)}</code> ត្រូវបានដោះចេញ�
 
 📱 អ្នកអាចយកទៅ activate លើឧបករណ៍ថ្មីបានហើយ។
 ⏳ <b>Reset បន្ទាប់អាចធ្វើបាននៅ:</b> ${escapeHtml(nextDate)}`,
-    resethwid_fail: (msg: string) => `❌ <b>Reset HWID បរាជ័យ</b>\n\n${escapeHtml(msg)}`,
+    resethwid_fail: (msg: string) => `❌ <b>Reset HWID ត្រូវបានបិទខ្ទប់ / បរាជ័យ</b>\n\n${escapeHtml(msg)}`,
     resethwid_server_err: `❌ <b>Server Error</b>\n\nមិនអាចភ្ជាប់ server បានទេ។ សូមព្យាយាមម្ដងទៀត។`,
 
     verify_checking: `🔍 <b>កំពុងពិនិត្យ key...</b>`,
@@ -256,7 +262,7 @@ Key <code>${escapeHtml(key)}</code> ត្រូវបានដោះចេញ�
 ⏳ <b>រយៈពេល:</b> ${escapeHtml(dur)}
 📱 <b>ចំនួនម៉ាស៊ីន:</b> ${escapeHtml(slots)}
 
-🔑 <b>Script Key របស់អ្នក:</b>
+🔑 <b>Script Key របស់អ្នក (ចាក់សោជាមួយគណនី Telegram នេះ):</b>
 <code>${escapeHtml(key)}</code>
 <i>(ចុចលើ key ដើម្បី copy)</i>
 
@@ -264,7 +270,7 @@ Key <code>${escapeHtml(key)}</code> ត្រូវបានដោះចេញ�
 <pre><code class="language-lua">getgenv().Key = "${escapeHtml(key)}"
 local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiexesc/chiro_UI/main/chiro_lib.luau"))()</code></pre>
 
-⚠️ <b>សំខាន់:</b> រក្សាទុក key របស់អ្នក! Voucher ដើមត្រូវបានប្រើរួចហើយ។`,
+🛡️ <i>Key នេះត្រូវបានចាក់សោសុវត្ថិភាពជាមួយ Telegram ID របស់អ្នក។ មានតែអ្នកទេដែលអាច Reset HWID បាន!</i>`,
     redeem_fail: (msg: string) =>
       `❌ <b>ការប្ដូរ Voucher បរាជ័យ</b>\n\n${escapeHtml(msg)}\n\nសូមពិនិត្យ code ម្ដងទៀត។`,
 
@@ -390,11 +396,34 @@ async function verifyKeyApi(key: string) {
   }
 }
 
-// ── Handle Callback Queries (Inline Language Buttons) ─────────────────────────
+async function resetHwidApi(key: string, telegramId?: number) {
+  try {
+    const res = await fetch(`${API_BASE}/reset-hwid`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key, telegramId }),
+    });
+    return (await res.json()) as any;
+  } catch (err: any) {
+    return { success: false, error: { message: err?.message || "Failed to reach license server." } };
+  }
+}
+
+async function fetchMyKeysApi(telegramId: number | string) {
+  try {
+    const res = await fetch(`${API_BASE}/my-keys?telegramId=${telegramId}`);
+    return (await res.json()) as any;
+  } catch {
+    return { success: false, data: [] };
+  }
+}
+
+// ── Handle Callback Queries ───────────────────────────────────────────────────
 async function handleCallbackQuery(cb: NonNullable<TelegramUpdate["callback_query"]>) {
   const userId = cb.from.id;
   const chatId = cb.message?.chat.id;
   const data = cb.data;
+  const lang = getLang(userId);
 
   if (data === "lang_en") {
     userLang.set(userId, "en");
@@ -414,7 +443,40 @@ async function handleCallbackQuery(cb: NonNullable<TelegramUpdate["callback_quer
     return;
   }
 
+  // Confirm HWID Reset for a specific saved key: "quick_reset_<KEY>"
+  if (data && data.startsWith("quick_reset_") && chatId) {
+    const key = data.replace("quick_reset_", "").trim();
+    await answerCallbackQuery(cb.id, "Processing HWID Reset...");
+    await executeHwidReset(chatId, key, userId, lang);
+    return;
+  }
+
   await answerCallbackQuery(cb.id);
+}
+
+// ── Execute HWID Reset with Account Verification ─────────────────────────────
+async function executeHwidReset(chatId: number, key: string, userId: number, lang: "en" | "km") {
+  const t = T[lang];
+  const keyboard = getReplyKeyboard(lang);
+
+  await sendMessage(chatId, t.resethwid_checking, keyboard);
+
+  const res = await resetHwidApi(key, userId);
+
+  if (res && res.success) {
+    const nextReset = res.data?.nextResetAvailable
+      ? new Date(res.data.nextResetAvailable).toLocaleDateString(
+          lang === "km" ? "km-KH" : "en-GB",
+          { day: "2-digit", month: "short", year: "numeric" }
+        )
+      : lang === "km" ? "4 ថ្ងៃ ពីឥឡូវ" : "4 days from now";
+    await sendMessage(chatId, t.resethwid_success(key, nextReset), keyboard);
+  } else {
+    const errMsg = res?.error?.message || (lang === "km"
+      ? "HWID Reset បរាជ័យ។ សូមពិនិត្យ key ម្ដងទៀត។"
+      : "Failed to reset HWID. Check your key or try again later.");
+    await sendMessage(chatId, t.resethwid_fail(errMsg), keyboard);
+  }
 }
 
 // ── Handle Incoming Messages ──────────────────────────────────────────────────
@@ -422,77 +484,167 @@ async function handleMessage(msg: NonNullable<TelegramUpdate["message"]>) {
   const chatId = msg.chat.id;
   const rawText = (msg.text || "").trim();
   const from = msg.from;
-  const userId = from?.id;
+  const userId = from?.id || 0;
   const username = from?.username ? `@${from.username}` : from?.first_name || "User";
   const lang = getLang(userId);
   const t = T[lang];
   const keyboard = getReplyKeyboard(lang);
 
-  console.log(`📩 [${username}]: "${rawText}" [Lang: ${lang}]`);
+  console.log(`📩 [${username} (${userId})]: "${rawText}" [Lang: ${lang}]`);
 
   // 1. /start
   if (rawText === "/start" || rawText.startsWith("/start ")) {
-    if (userId) userState.delete(userId);
+    userState.delete(userId);
     await sendMessage(chatId, t.start(username), keyboard);
     return;
   }
 
   // 2. /help or button ℹ️ Help / ℹ️ ជំនួយ
   if (rawText === "/help" || rawText === "ℹ️ Help" || rawText === "ℹ️ ជំនួយ") {
-    if (userId) userState.delete(userId);
+    userState.delete(userId);
     await sendMessage(chatId, t.help, keyboard);
     return;
   }
 
   // 3. /free or button 🆓 Free 24h Key / 🆓 Key ឥតគិតថ្លៃ
   if (rawText === "/free" || rawText === "🆓 Free 24h Key" || rawText === "🆓 Key ឥតគិតថ្លៃ") {
-    if (userId) userState.delete(userId);
+    userState.delete(userId);
     await sendMessage(chatId, t.free, keyboard);
     return;
   }
 
   // 4. /lang or button 🌐 ភាសា / Language
   if (rawText.startsWith("/lang") || rawText === "🌐 ភាសា / Language") {
-    if (userId) userState.delete(userId);
+    userState.delete(userId);
     const arg = rawText.replace("/lang", "").trim().toLowerCase();
     if (arg === "en") {
-      if (userId) userLang.set(userId, "en");
+      userLang.set(userId, "en");
       await sendMessage(chatId, T.en.lang_set_en, getReplyKeyboard("en"));
       return;
     }
     if (arg === "km") {
-      if (userId) userLang.set(userId, "km");
+      userLang.set(userId, "km");
       await sendMessage(chatId, T.km.lang_set_km, getReplyKeyboard("km"));
       return;
     }
-    // Show inline picker buttons
     await sendMessage(chatId, t.lang_prompt, inlineLangKeyboard);
     return;
   }
 
-  // 5. Button tap: 🔑 Redeem Key / 🔑 ប្ដូរ Key
+  // 5. Button tap: 📊 My Keys / 📊 Key របស់ខ្ញុំ or command /mykeys
+  if (rawText === "📊 My Keys" || rawText === "📊 Key របស់ខ្ញុំ" || rawText === "/mykeys") {
+    userState.delete(userId);
+    await sendMessage(chatId, lang === "km" ? "🔍 កំពុងស្វែងរក Key របស់អ្នក..." : "🔍 Looking up your redeemed keys...", keyboard);
+
+    const res = await fetchMyKeysApi(userId);
+    const keys = (res && res.data) ? res.data : [];
+
+    if (keys.length === 0) {
+      await sendMessage(
+        chatId,
+        lang === "km"
+          ? "⚠️ មិនមាន Key ណាមួយត្រូវបានភ្ជាប់ជាមួយគណនី Telegram នេះទេ។\n\nសូមប្ដូរ voucher ដោយចុច <b>🔑 ប្ដូរ Key</b> ជាមុនសិន!"
+          : "⚠️ No keys are currently bound to this Telegram account.\n\nRedeem a voucher first by tapping <b>🔑 Redeem Key</b>!",
+        keyboard
+      );
+      return;
+    }
+
+    let text = lang === "km"
+      ? `📋 <b>KEY ដែលបានភ្ជាប់ជាមួយគណនីរបស់អ្នក (${keys.length}):</b>\n\n`
+      : `📋 <b>KEYS BOUND TO YOUR TELEGRAM ACCOUNT (${keys.length}):</b>\n\n`;
+
+    const inlineButtons: Array<{ text: string; callback_data: string }> = [];
+
+    for (let i = 0; i < keys.length; i++) {
+      const k = keys[i];
+      const prodName = k.product?.name || "Chiro UI";
+      const exp = k.expiresAt
+        ? new Date(k.expiresAt).toLocaleDateString(lang === "km" ? "km-KH" : "en-GB")
+        : (lang === "km" ? "គ្មានកំណត់" : "Lifetime");
+      const devCount = k._count?.devices ?? 0;
+
+      text += `<b>${i + 1}. ${escapeHtml(prodName)}</b>\n`;
+      text += `🔑 <code>${escapeHtml(k.key)}</code>\n`;
+      text += `🟢 ស្ថានភាព: <b>${escapeHtml(k.status)}</b> | 📱 ឧបករណ៍: <b>${devCount}/${k.maxDevices}</b>\n`;
+      text += `⏳ ផុតកំណត់: <b>${escapeHtml(exp)}</b>\n\n`;
+
+      inlineButtons.push({
+        text: `🔄 Reset HWID #${i + 1}`,
+        callback_data: `quick_reset_${k.key}`,
+      });
+    }
+
+    const inlineRow = inlineButtons.length > 0
+      ? { inline_keyboard: [inlineButtons] }
+      : undefined;
+
+    await sendMessage(chatId, text, inlineRow);
+    return;
+  }
+
+  // 6. Button tap: 🔑 Redeem Key / 🔑 ប្ដូរ Key
   if (rawText === "🔑 Redeem Key" || rawText === "🔑 ប្ដូរ Key") {
-    if (userId) userState.set(userId, "waiting_redeem");
+    userState.set(userId, "waiting_redeem");
     await sendMessage(chatId, t.prompt_redeem, keyboard);
     return;
   }
 
-  // 6. Button tap: 🔄 Reset HWID
+  // 7. Button tap: 🔄 Reset HWID
   if (rawText === "🔄 Reset HWID") {
-    if (userId) userState.set(userId, "waiting_resethwid");
+    // Check if this user already has bound keys in database
+    const myKeysRes = await fetchMyKeysApi(userId);
+    const myKeys = (myKeysRes && myKeysRes.data) ? myKeysRes.data : [];
+
+    if (myKeys.length === 1) {
+      // 1-Click Reset for their single bound key
+      const singleKey = myKeys[0].key;
+      const confirmInline = {
+        inline_keyboard: [
+          [
+            { text: lang === "km" ? "🔄 បញ្ជាក់ Reset HWID ឥឡូវ" : "🔄 Confirm Reset HWID Now", callback_data: `quick_reset_${singleKey}` },
+          ],
+        ],
+      };
+      await sendMessage(
+        chatId,
+        lang === "km"
+          ? `🛡️ <b>បានរកឃើញ Key របស់អ្នក:</b>\n<code>${escapeHtml(singleKey)}</code>\n\nចុចប៊ូតុងខាងក្រោមដើម្បី Reset ឬផ្ញើ Key ផ្សេង:`
+          : `🛡️ <b>Found your redeemed key:</b>\n<code>${escapeHtml(singleKey)}</code>\n\nTap the button below to Reset, or paste another key:`,
+        confirmInline
+      );
+      userState.set(userId, "waiting_resethwid");
+      return;
+    } else if (myKeys.length > 1) {
+      // Multiple keys
+      const buttons = myKeys.map((k: any, idx: number) => [{
+        text: `🔄 Reset ${k.product?.name || "Key"} #${idx + 1}`,
+        callback_data: `quick_reset_${k.key}`,
+      }]);
+      await sendMessage(
+        chatId,
+        lang === "km"
+          ? "🛡️ <b>ជ្រើសរើស Key ដែលអ្នកចង់ Reset HWID:</b>"
+          : "🛡️ <b>Select which key you want to Reset HWID:</b>",
+        { inline_keyboard: buttons }
+      );
+      userState.set(userId, "waiting_resethwid");
+      return;
+    }
+
+    userState.set(userId, "waiting_resethwid");
     await sendMessage(chatId, t.prompt_resethwid, keyboard);
     return;
   }
 
-  // 7. Button tap: 🔍 Verify Key / 🔍 ពិនិត្យ Key
+  // 8. Button tap: 🔍 Verify Key / 🔍 ពិនិត្យ Key
   if (rawText === "🔍 Verify Key" || rawText === "🔍 ពិនិត្យ Key") {
-    if (userId) userState.set(userId, "waiting_verify");
+    userState.set(userId, "waiting_verify");
     await sendMessage(chatId, t.prompt_verify, keyboard);
     return;
   }
 
-  // Check state if user previously pressed a button
-  const pendingState = userId ? userState.get(userId) : undefined;
+  const pendingState = userState.get(userId);
 
   // ── Handle /resethwid or pending state ──────────────────────────────────────
   let keyToReset = "";
@@ -500,36 +652,11 @@ async function handleMessage(msg: NonNullable<TelegramUpdate["message"]>) {
     keyToReset = rawText.replace("/resethwid", "").trim();
   } else if (pendingState === "waiting_resethwid") {
     keyToReset = rawText;
-    if (userId) userState.delete(userId);
+    userState.delete(userId);
   }
 
   if (keyToReset) {
-    await sendMessage(chatId, t.resethwid_checking, keyboard);
-    try {
-      const res = await fetch(`${API_BASE}/reset-hwid`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ key: keyToReset }),
-      });
-      const data = (await res.json()) as any;
-
-      if (data && data.success) {
-        const nextReset = data.data?.nextResetAvailable
-          ? new Date(data.data.nextResetAvailable).toLocaleDateString(
-              lang === "km" ? "km-KH" : "en-GB",
-              { day: "2-digit", month: "short", year: "numeric" }
-            )
-          : lang === "km" ? "4 ថ្ងៃ ពីឥឡូវ" : "4 days from now";
-        await sendMessage(chatId, t.resethwid_success(keyToReset, nextReset), keyboard);
-      } else {
-        const errMsg = data?.error?.message || (lang === "km"
-          ? "HWID Reset បរាជ័យ។ សូមពិនិត្យ key ម្ដងទៀត។"
-          : "Failed to reset HWID. Check your key or try again later.");
-        await sendMessage(chatId, t.resethwid_fail(errMsg), keyboard);
-      }
-    } catch {
-      await sendMessage(chatId, t.resethwid_server_err, keyboard);
-    }
+    await executeHwidReset(chatId, keyToReset, userId, lang);
     return;
   }
 
@@ -539,7 +666,7 @@ async function handleMessage(msg: NonNullable<TelegramUpdate["message"]>) {
     keyToVerify = rawText.replace("/verify", "").trim();
   } else if (pendingState === "waiting_verify") {
     keyToVerify = rawText;
-    if (userId) userState.delete(userId);
+    userState.delete(userId);
   }
 
   if (keyToVerify) {
@@ -552,7 +679,7 @@ async function handleMessage(msg: NonNullable<TelegramUpdate["message"]>) {
       const prodName = d.product?.name || "Chiro UI";
       const exp = d.license?.expiresAt
         ? new Date(d.license.expiresAt).toLocaleDateString(lang === "km" ? "km-KH" : "en-GB")
-        : lang === "km" ? "គ្មានកំណត់" : "Lifetime";
+        : (lang === "km" ? "គ្មានកំណត់" : "Lifetime");
       const devices = `${d.license?.currentDevices || 0}/${d.license?.maxDevices || 1}`;
       await sendMessage(chatId, t.verify_valid(prodName, status, exp, devices), keyboard);
     } else {
@@ -570,12 +697,12 @@ async function handleMessage(msg: NonNullable<TelegramUpdate["message"]>) {
     codeToRedeem = rawText;
   } else if (pendingState === "waiting_redeem") {
     codeToRedeem = rawText;
-    if (userId) userState.delete(userId);
+    userState.delete(userId);
   }
 
   if (codeToRedeem) {
     await sendMessage(chatId, t.redeem_checking, keyboard);
-    const result = await redeemVoucherApi(codeToRedeem, from?.id, from?.username);
+    const result = await redeemVoucherApi(codeToRedeem, userId, from?.username);
 
     if (result && result.success && result.data) {
       const data = result.data;
@@ -631,10 +758,11 @@ async function startPolling() {
     await callTelegramApi("setMyCommands", {
       commands: [
         { command: "start", description: "Open Main Menu / បើកម៉ឺនុយ" },
+        { command: "mykeys", description: "View My Keys / Key របស់ខ្ញុំ" },
         { command: "redeem", description: "Redeem Voucher / ប្ដូរ Key" },
         { command: "free", description: "Free 24h Key / Key ឥតគិតថ្លៃ" },
         { command: "verify", description: "Verify Key / ពិនិត្យ Key" },
-        { command: "resethwid", description: "Reset HWID (4-day cooldown)" },
+        { command: "resethwid", description: "Reset HWID (Protected)" },
         { command: "lang", description: "Language / ប្តូរភាសា" },
         { command: "help", description: "Help / ជំនួយ" },
       ],
@@ -646,6 +774,7 @@ async function startPolling() {
   ⚡ CHIRO TELEGRAM REDEEM BOT ACTIVE
   👤 Bot Username: @${botUsername}
   🔗 API Base: ${API_BASE}
+  🔒 Security: Telegram ID Binding on HWID Reset Active
   📱 Phone Menu: Touch Buttons + Telegram [/] Menu
   🌐 Languages: English 🇺🇸 | ខ្មែរ 🇰🇭
   ========================================================
