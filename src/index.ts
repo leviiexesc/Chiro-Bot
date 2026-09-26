@@ -318,7 +318,14 @@ healthServer.listen(PORT, () => {
     } catch (err) {
       console.warn("⚠️ Self-ping failed:", err);
     }
-  }, 14 * 60 * 1000);
+    // Also keep Chiro License Center awake 24/7
+    try {
+      await fetch("https://chiro-license-center.onrender.com/api/v1/health");
+      console.log("💓 [Keep-Alive] Pinged Chiro License Center");
+    } catch {
+      // Ignore background errors
+    }
+  }, 8 * 60 * 1000);
 });
 
 // ── Telegram API Helpers ──────────────────────────────────────────────────────
