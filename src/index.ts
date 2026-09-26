@@ -126,7 +126,7 @@ Tap <b>🔑 Redeem Key</b> and send your voucher code. The bot binds the key to 
 3️⃣ <b>How to execute in Roblox?</b>
 Put this at the top of your executor:
 <pre><code class="language-lua">getgenv().Key = "CHIRO_YOUR_KEY"
-local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiexesc/chiro_UI/main/chiro_lib.luau"))()</code></pre>
+local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiexesc/chiro_UI/main/chiro_loader.lua"))()</code></pre>
 
 4️⃣ <b>Changed PC or device?</b>
 Tap <b>🔄 Reset HWID</b>.
@@ -184,7 +184,7 @@ Your key <code>${escapeHtml(key)}</code> has been unlinked from all devices.
 
 📋 <b>How to execute:</b>
 <pre><code class="language-lua">getgenv().Key = "${escapeHtml(key)}"
-local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiexesc/chiro_UI/main/chiro_lib.luau"))()</code></pre>
+local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiexesc/chiro_UI/main/chiro_loader.lua"))()</code></pre>
 
 🛡️ <i>This key is securely bound to your Telegram ID. Only you can reset its HWID!</i>`,
     redeem_fail: (msg: string) =>
@@ -216,7 +216,7 @@ local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiex
 3️⃣ <b>តើត្រូវ execute ក្នុង Roblox យ៉ាងណា?</b>
 ដាក់កូដនេះនៅកំពូល executor របស់អ្នក:
 <pre><code class="language-lua">getgenv().Key = "CHIRO_YOUR_KEY"
-local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiexesc/chiro_UI/main/chiro_lib.luau"))()</code></pre>
+local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiexesc/chiro_UI/main/chiro_loader.lua"))()</code></pre>
 
 4️⃣ <b>ប្ដូរទូរស័ព្ទ ឬកុំព្យូទ័រថ្មី?</b>
 ចុច <b>🔄 Reset HWID</b>
@@ -274,7 +274,7 @@ Key <code>${escapeHtml(key)}</code> ត្រូវបានដោះចេញ�
 
 📋 <b>របៀប execute ក្នុង Roblox:</b>
 <pre><code class="language-lua">getgenv().Key = "${escapeHtml(key)}"
-local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiexesc/chiro_UI/main/chiro_lib.luau"))()</code></pre>
+local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiexesc/chiro_UI/main/chiro_loader.lua"))()</code></pre>
 
 🛡️ <i>Key នេះត្រូវបានចាក់សោសុវត្ថិភាពជាមួយ Telegram ID របស់អ្នក។ មានតែអ្នកទេដែលអាច Reset HWID បាន!</i>`,
     redeem_fail: (msg: string) =>
