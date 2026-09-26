@@ -132,16 +132,19 @@ local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiex
 Tap <b>🔄 Reset HWID</b>.
 🛡️ <b>Security Protection:</b> Only <i>your</i> Telegram account can reset HWID for your redeemed keys! Nobody else can reset your key from another account.`,
 
-    free: `🆓 <b>CHIRO UI FREE 24-HOUR KEY</b>
+    free: (tgId: number | string) => `🆓 <b>CHIRO UI FREE 24-HOUR KEY (1-TIME CLAIM)</b>
 
-Generate a free 24-hour key by completing 3 quick checkpoints:
+Generate a free 24-hour voucher key by completing 3 quick checkpoints:
 
 👉 <b>Open Checkpoint Page:</b>
-https://chiro-license-center.onrender.com/free-key
+https://chiro-license-center.onrender.com/free-key?telegramId=${tgId}
 
-1. Open link above
+1. Open link above (auto-bound to your Telegram ID)
 2. Complete 3 steps (15s wait each)
-3. Copy your free key!`,
+3. Copy your <b>Voucher Code</b> (<code>CHIRO-XXXX-XXXX-XXXX</code>)
+4. Return here, tap <b>🔑 Redeem Key</b> to get your script key!
+
+⚠️ <i>Limit: Each Telegram account can claim 1 free key only.</i>`,
 
     lang_prompt: `🌐 <b>Select your preferred language:</b>`,
     lang_set_en: `✅ Language set to <b>English</b> 🇺🇸`,
@@ -219,16 +222,19 @@ local Chiro = loadstring(game:HttpGet("https://raw.githubusercontent.com/leviiex
 ចុច <b>🔄 Reset HWID</b>
 🛡️ <b>ប្រព័ន្ធសុវត្ថិភាពខ្ពស់:</b> មានតែ Telegram របស់អ្នកប៉ុណ្ណោះដែលអាច Reset HWID បាន! គណនីផ្សេងមិនអាចលួច reset key របស់អ្នកបានឡើយ។`,
 
-    free: `🆓 <b>CHIRO UI KEY ឥតគិតថ្លៃ 24 ម៉ោង</b>
+    free: (tgId: number | string) => `🆓 <b>CHIRO UI KEY ឥតគិតថ្លៃ 24 ម៉ោង (ទទួលម្តងគត់)</b>
 
-ទទួលបាន key ឥតគិតថ្លៃ 24 ម៉ោង ដោយបំពេញ 3 ជំហានរហ័ស:
+ទទួលបាន Voucher key ឥតគិតថ្លៃ 24 ម៉ោង ដោយបំពេញ 3 ជំហានរហ័ស:
 
 👉 <b>បើកទំព័រ Checkpoint:</b>
-https://chiro-license-center.onrender.com/free-key
+https://chiro-license-center.onrender.com/free-key?telegramId=${tgId}
 
-1. បើក link ខាងលើ
-2. បំពេញ 3 ជំហាន (រង់ចាំ 15 វិនាទីនីមួយៗ)
-3. Copy key យកទៅប្រើភ្លាមៗ!`,
+1. បើក link ខាងលើ (ភ្ជាប់ជាមួយ Telegram របស់អ្នក)
+2. បំពេញ 3 ជំហាន (រង់ចាំ 15 វិនាទី)
+3. Copy <b>Voucher Code</b> (<code>CHIRO-XXXX-XXXX-XXXX</code>)
+4. ត្រឡប់មកទីនេះ ចុច <b>🔑 ប្ដូរ Key</b> ដើម្បីប្ដូរយក Roblox key!
+
+⚠️ <i>កំណត់សម្គាល់: គណនី Telegram នីមួយៗអាចទទួល key ឥតគិតថ្លៃបានតែ 1 ដងប៉ុណ្ណោះ។</i>`,
 
     lang_prompt: `🌐 <b>សូមជ្រើសរើសភាសាដែលអ្នកចង់ប្រើ:</b>`,
     lang_set_en: `✅ Language set to <b>English</b> 🇺🇸`,
@@ -509,7 +515,7 @@ async function handleMessage(msg: NonNullable<TelegramUpdate["message"]>) {
   // 3. /free or button 🆓 Free 24h Key / 🆓 Key ឥតគិតថ្លៃ
   if (rawText === "/free" || rawText === "🆓 Free 24h Key" || rawText === "🆓 Key ឥតគិតថ្លៃ") {
     userState.delete(userId);
-    await sendMessage(chatId, t.free, keyboard);
+    await sendMessage(chatId, t.free(userId), keyboard);
     return;
   }
 
