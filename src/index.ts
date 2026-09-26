@@ -155,6 +155,7 @@ Hello, *${username}*! This bot allows you to redeem your store purchase voucher 
 🔑 \`/redeem <CODE>\` — Redeem your purchase voucher
 🆓 \`/free\` — Get link for a Free 24-Hour Key
 🔍 \`/verify <KEY>\` — Check status of a script key
+🔄 \`/resethwid <KEY>\` — Reset HWID *(4-day cooldown)*
 ℹ️ \`/help\` — How to use and execute
 
 *Example:*
@@ -184,7 +185,12 @@ getgenv().Key = "CHIRO_YOUR_REDEEMED_KEY"
 \`\`\`
 
 4️⃣ *Need a Free Key?*
-Type \`/free\` to access our free key generator checkpoint!`;
+Type \`/free\` to access our free key generator checkpoint!
+
+5️⃣ *HWID Reset (New Device)?*
+If you changed PC/device, use:
+\`/resethwid CHIRO_YOUR_KEY\`
+⚠️ *Cooldown: 4 days between resets.*`;
     await sendMessage(chatId, help);
     return;
   }
@@ -205,7 +211,49 @@ https://chiro-license-center.onrender.com/free-key
     return;
   }
 
-  // 4. /verify <KEY>
+  // 4. /resethwid <KEY>
+  if (rawText.startsWith("/resethwid")) {
+    const keyToReset = rawText.replace("/resethwid", "").trim();
+    if (!keyToReset) {
+      await sendMessage(
+        chatId,
+        "⚠️ Please provide your script key to reset HWID.\nExample: `/resethwid CHIRO_7d672a9d2743ddd3b50c2710`"
+      );
+      return;
+    }
+
+    await sendMessage(chatId, "🔄 *Resetting your HWID...*");
+
+    try {
+      const res = await fetch(`${API_BASE}/reset-hwid`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: keyToReset }),
+      });
+      const data = (await res.json()) as any;
+
+      if (data && data.success) {
+        const nextReset = data.data?.nextResetAvailable
+          ? new Date(data.data.nextResetAvailable).toLocaleDateString("en-GB", {
+              day: "2-digit", month: "short", year: "numeric",
+            })
+          : "4 days from now";
+        await sendMessage(
+          chatId,
+          `✅ *HWID Reset Successful!*\n\nYour key \`${keyToReset}\` has been unlinked from all devices.\n\n📱 You can now activate it on your new device.\n⏳ *Next reset available:* ${nextReset}`
+        );
+      } else {
+        const errMsg = data?.error?.message || "Failed to reset HWID. Check your key or try again later.";
+        await sendMessage(chatId, `❌ *HWID Reset Failed*\n\n${errMsg}`);
+      }
+    } catch (err) {
+      await sendMessage(chatId, "❌ *Server Error*\n\nCould not reach the license server. Please try again later.");
+    }
+    return;
+  }
+
+  // 5. /verify <KEY>
+
   if (rawText.startsWith("/verify")) {
     const keyToTest = rawText.replace("/verify", "").trim();
     if (!keyToTest) {
